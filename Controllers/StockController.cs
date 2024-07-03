@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models.StockModel;
 using TheStore.Services.StockService;
-namespace TheStore.Controllers.StockController;
+namespace TheStore.Controllers;
 
 [ApiController]
 [Route("api/inventory")]

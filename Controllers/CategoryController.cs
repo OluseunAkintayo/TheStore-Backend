@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models.CategoryModel;
 using TheStore.Services.CategoryService;
-namespace TheStore.Controllers.CategoryController;
+namespace TheStore.Controllers;
 
 [ApiController]
 [Route("api/products/category")]

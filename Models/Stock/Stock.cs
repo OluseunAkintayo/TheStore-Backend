@@ -11,4 +11,6 @@ public class Stock {
   public int ReorderLevel { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
+  public Guid CreatedBy { get; set; }
+  public Guid? UpdatedBy { get; set; }
 }

@@ -1,6 +1,6 @@
 using TheStore.Models;
 
-namespace TheStore.Services.ManufacturerService;
+namespace TheStore.Services;
 
 public class ManufacturerService {
 

@@ -14,6 +14,8 @@ public class Product {
   public string ProductCode { get; set; } = string.Empty;
   public string ProductName { get; set; } = string.Empty;
   public string ProductDescription { get; set; } = string.Empty;
+  public int PictureId { get; set; }
+  public Picture? Picture { get; set; }
   public bool IsActive { get; set; }
   public double Cost { get; set; }
   public double Price { get; set; }
@@ -25,11 +27,13 @@ public class Product {
   public Category? Category { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
+  public Guid CreatedBy { get; set; }
+  public Guid? UpdatedBy { get; set; }
 }
 
 public class Picture {
   [Key]
   public int PictureId { get; set; }
   public string FileName { get; set; } = string.Empty;
-  public string File { get; set; } = string.Empty;
+  public string FileSrc { get; set; } = string.Empty;
 }

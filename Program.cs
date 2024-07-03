@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddAuthentication(auth => {
   auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
   auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options => {
   options.TokenValidationParameters = new TokenValidationParameters {
     ValidateIssuer = true,
@@ -42,7 +43,7 @@ builder.Services.AddAuthentication(auth => {
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
   };
 });
-
+builder.Services.AddAuthorization();
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
@@ -59,6 +60,8 @@ builder.Services.AddTransient<CategoryService>();
 builder.Services.AddTransient<ProductCodeService>();
 builder.Services.AddTransient<ProductService>();
 builder.Services.AddTransient<StockService>();
+builder.Services.AddTransient<AuthService>();
+builder.Services.AddTransient<EmailService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -78,8 +81,9 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseCors("AllowLocalOrigin");
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

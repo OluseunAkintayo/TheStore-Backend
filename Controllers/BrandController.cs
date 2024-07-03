@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models;
 using TheStore.Services.BrandService;
-namespace TheStore.Controllers.BrandController;
+namespace TheStore.Controllers;
 
 [ApiController]
 [Route("api/products/brands")]
@@ -22,10 +23,11 @@ public class BrandController : ControllerBase {
   }
 
 
+
+  [HttpGet("", Name = "GetAllBrands")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  [HttpGet("", Name = "GetAllBrands")]
   public ActionResult<BrandResponse> GetAllBrands(){
     var response = brandService.GetAllBrands();
     if(!response.Success) return BadRequest(response);
@@ -43,6 +45,7 @@ public class BrandController : ControllerBase {
   }
 
 
+  [Authorize(Roles = "administrator")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -54,6 +57,7 @@ public class BrandController : ControllerBase {
   }
 
 
+  [Authorize(Roles = "administrator")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]

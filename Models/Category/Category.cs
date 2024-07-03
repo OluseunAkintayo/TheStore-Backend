@@ -10,4 +10,6 @@ public class Category {
   public bool IsActive { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
+  public Guid CreatedBy { get; set; }
+  public Guid? UpdatedBy { get; set; }
 }

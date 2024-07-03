@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models;
 using TheStore.Services.ProductService;
-namespace TheStore.Controllers.ProductController;
+namespace TheStore.Controllers;
 
 [ApiController]
 [Route("api/products")]
