@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models.Users;
 using TheStore.Services;
@@ -42,14 +43,13 @@ public class AuthController : ControllerBase {
     return Ok(response);
   }
 
-
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpGet("currentuser", Name = "GetCurrentUser")]
   public ActionResult? GetCurrentUser(){
-    var identity = HttpContext.User.Identity as ClaimsIdentity;
-    if(identity == null) {
+    if (HttpContext.User.Identity is not ClaimsIdentity identity) {
       return null;
     };
     var claims = identity.Claims;

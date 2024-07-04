@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace TheStore.Models;
 
+[Index(nameof(BrandName), IsUnique = true)]
 public class Brand {
   [Key]
   public Guid BrandId { get; set; }
@@ -13,5 +15,5 @@ public class Brand {
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
   public Guid CreatedBy { get; set; }
-  public Guid? UpdatedBy { get; set; }
+  public Guid? ModifiedBy { get; set; }
 }

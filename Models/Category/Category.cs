@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 namespace TheStore.Models.CategoryModel;
+
+[Index(nameof(CategoryName), IsUnique = true)]
 
 public class Category {
   [Key]
@@ -11,5 +14,5 @@ public class Category {
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
   public Guid CreatedBy { get; set; }
-  public Guid? UpdatedBy { get; set; }
+  public Guid? ModifiedBy { get; set; }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TheStore.Services;
@@ -12,9 +13,11 @@ using TheStore.Services;
 namespace TheStore.Migrations
 {
     [DbContext(typeof(RepoService))]
-    partial class RepoServiceModelSnapshot : ModelSnapshot
+    [Migration("20240704115816_AddedCreatedByColumns")]
+    partial class AddedCreatedByColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

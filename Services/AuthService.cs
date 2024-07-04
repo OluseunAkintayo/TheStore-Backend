@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using BCrypt.Net;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TheStore.Models.Users;
 namespace TheStore.Services;
@@ -122,7 +121,7 @@ public class AuthService {
     if(!BCrypt.Net.BCrypt.EnhancedVerify(loginUser.Passcode, user.PasswordHash, HashType.SHA512)) {
       var passwordError = new LoginResponse {
         Success = false,
-        Message = "Invalid password or password"
+        Message = "Invalid username or password"
       };
       return passwordError;
     }
@@ -150,7 +149,7 @@ public class AuthService {
       new(ClaimTypes.Email, user.Username),
       new(ClaimTypes.Role, user.Role.Contains("administrator") ? "administrator" : (user.Role.Contains("vendor") ? "vendor" : "customer" ))
     };
-    DateTime exp = DateTime.Now.AddHours(1);
+    DateTime exp = DateTime.Now.AddMinutes(5);
     var token = new JwtSecurityToken(
       config["Jwt:Issuer"],
       config["Jwt:Audience"],

@@ -62,6 +62,7 @@ builder.Services.AddTransient<ProductService>();
 builder.Services.AddTransient<StockService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<EmailService>();
+builder.Services.AddTransient<ManufacturerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -28,7 +28,7 @@ public class Product {
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
   public Guid CreatedBy { get; set; }
-  public Guid? UpdatedBy { get; set; }
+  public Guid? ModifiedBy { get; set; }
 }
 
 public class Picture {

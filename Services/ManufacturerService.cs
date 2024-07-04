@@ -3,7 +3,6 @@ using TheStore.Models;
 namespace TheStore.Services;
 
 public class ManufacturerService {
-
   private readonly RepoService repo;
   public ManufacturerService(RepoService repoService){
     repo = repoService;
@@ -60,7 +59,7 @@ public class ManufacturerService {
     return response;
   }
  
-  public ManufacturerResponse CreateManufacturer(ManufacturerDto manufacturerDto) {
+  public ManufacturerResponse CreateManufacturer(ManufacturerDto manufacturerDto, Guid userId) {
     var ManufacturerItem = repo.Manufacturers.FirstOrDefault(item => item.ManufacturerName == manufacturerDto.ManufacturerName);
     if (ManufacturerItem != null) {
       var error = new ManufacturerResponse() {
@@ -72,9 +71,9 @@ public class ManufacturerService {
 
     Manufacturer manufacturer = new() {
       ManufacturerName = manufacturerDto.ManufacturerName,
-      CreatedAt = DateTime.UtcNow,
       IsActive = true,
-      ModifiedAt = null
+      CreatedAt = DateTime.UtcNow,
+      CreatedBy = userId
     };
     
     repo.Manufacturers.Add(manufacturer);

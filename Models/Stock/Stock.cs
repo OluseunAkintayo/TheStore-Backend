@@ -12,5 +12,5 @@ public class Stock {
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
   public Guid CreatedBy { get; set; }
-  public Guid? UpdatedBy { get; set; }
+  public Guid? ModifiedBy { get; set; }
 }
