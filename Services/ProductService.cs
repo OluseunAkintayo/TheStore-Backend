@@ -30,7 +30,7 @@ public class ProductService {
     };
   }
 
-  public ProductResponse NewProduct(ProductDTO productDto) {
+  public ProductResponse NewProduct(ProductDTO productDto, Guid userId) {
     Product? product = repo.Products.FirstOrDefault(item => item.ProductName == productDto.ProductName);
     if (product != null) {
       var error = new ProductResponse() {
@@ -56,6 +56,7 @@ public class ProductService {
       Cost = productDto.Cost,
       Price = productDto.Price,
       CreatedAt = DateTime.UtcNow,
+      CreatedBy = userId,
       IsActive = true,
       ProductDescription = productDto.ProductName
     };
@@ -88,7 +89,7 @@ public class ProductService {
     };
   }
 
-  public ProductResponse UpdateProduct(Guid id, ProductDTO productDto) {
+  public ProductResponse UpdateProduct(Guid id, ProductDTO productDto, Guid userId) {
     Product? product = repo.Products.FirstOrDefault(item => item.Id == id);
     if (product == null) {
       return new ProductResponse {
@@ -106,7 +107,10 @@ public class ProductService {
     product.IsActive = true;
     product.ProductDescription = productDto.ProductName;
     product.ModifiedAt = DateTime.UtcNow;
+    product.ModifiedBy = userId;
+
     repo.SaveChanges();
+    
     return new ProductResponse {
       Success = true,
       Message = "The product has been updated",

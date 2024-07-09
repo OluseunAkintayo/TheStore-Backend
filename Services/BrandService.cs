@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TheStore.Models;
 namespace TheStore.Services.BrandService;
 
@@ -9,19 +8,39 @@ public class BrandService {
     repo = repoService;
   }
 
-  public BrandResponse GetAllBrands() {
-    var brands = repo.Brands.ToList();
+  public BrandManufacturerResponse GetAllBrands() {
+    // var brands = repo.Brands.
+    //   Include(item => item.Manufacturer)
+    //   .Select(item => new BrandManufacturer {
+    //     BrandId = item.BrandId,
+    //     BrandName = item.BrandName,
+    //     ManufacturerName = item.Manufacturer!.ManufacturerName,
+    //     IsActive = item.IsActive,
+    //     CreatedAt = item.CreatedAt,
+    //   })
+    //   .ToList();
+    var brands = (
+      from x in repo.Brands join y in repo.Manufacturers on x.ManufacturerId equals y.Id
+      select new BrandManufacturer {
+        BrandId = x.BrandId,
+        BrandName = x.BrandName,
+        ManufacturerName = x.Manufacturer!.ManufacturerName,
+        ManufacturerId = x.ManufacturerId,
+        IsActive = x.IsActive,
+        CreatedAt = x.CreatedAt
+      }).ToList();
+    
     if(brands == null) {
-      var error = new BrandResponse() {
+      BrandManufacturerResponse error = new () {
         Message = "Error retrieving brands",
         Success = false
       };
       return error;
     }
-    var response = new BrandResponse() {
-      Data = brands,
+    BrandManufacturerResponse response = new() {
       Success = true,
-      Message = "Brands retrieved successfully!"
+      Message = "Brands retrieved successfully!",
+      Data = brands
     };
     return response;
   }
@@ -52,21 +71,21 @@ public class BrandService {
     return response;
   }
  
-  public BrandResponse CreateBrand(BrandDto brandDto) {
-    var product = repo.Brands.FirstOrDefault(item => item.BrandName == brandDto.BrandName);
+  public BrandResponse CreateBrand(NewBrandDto newBrandDto) {
+    var product = repo.Brands.FirstOrDefault(item => item.BrandName == newBrandDto.BrandName);
     if (product != null) {
       var error = new BrandResponse() {
         Success = false,
-        Message = $"Duplicate Error: Brand name {brandDto.BrandName} already exists. Please enter a unique brand name",
+        Message = $"Duplicate Error: Brand name {newBrandDto.BrandName} already exists. Please enter a unique brand name",
       };
       return error;
     }
 
     Brand newBrand = new() {
-      BrandName = brandDto.BrandName,
-      ManufacturerId = brandDto.ManufacturerId,
+      BrandName = newBrandDto.BrandName,
+      ManufacturerId = newBrandDto.ManufacturerId,
       CreatedAt = DateTime.UtcNow,
-      IsActive = brandDto.IsActive
+      IsActive = true
     };
     
     repo.Brands.Add(newBrand);
