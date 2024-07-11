@@ -10,7 +10,7 @@ public class BrandService {
   }
 
   public BrandResponse GetAllBrands() {
-    var brands = repo.Brands.ToList();
+    var brands = repo.Brands.OrderBy(item => item.BrandName).ToList();
     if(brands == null) {
       var error = new BrandResponse() {
         Message = "Error retrieving brands",

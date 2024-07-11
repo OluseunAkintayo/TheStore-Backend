@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TheStore.Models;
+using TheStore.Models.StockModel;
 namespace TheStore.Services.ProductService;
 
 public class ProductService {
@@ -30,15 +31,15 @@ public class ProductService {
     };
   }
 
-  public ProductResponse NewProduct(ProductDTO productDto) {
-    Product? product = repo.Products.FirstOrDefault(item => item.ProductName == productDto.ProductName);
-    if (product != null) {
-      var error = new ProductResponse() {
-        Success = false,
-        Message = $"Duplicate Error: {productDto.ProductName} already exists. Please enter a unique product name",
-      };
-      return error;
-    }
+  public ProductResponse NewProduct(ProductDTO productDto, Guid userId) {
+    // Product? product = repo.Products.FirstOrDefault(item => item.ProductName == productDto.ProductName);
+    // if (product != null) {
+    //   var error = new ProductResponse() {
+    //     Success = false,
+    //     Message = $"Duplicate Error: {productDto.ProductName} already exists. Please enter a unique product name",
+    //   };
+    //   return error;
+    // }
 
     if (productDto.Cost > productDto.Price) {
       var error = new ProductResponse() {
@@ -48,19 +49,34 @@ public class ProductService {
       return error;
     }
 
+    DateTime now = DateTime.UtcNow;
+
     Product newProduct = new() {
-      ProductCode = (productDto.ProductCode != null && productDto.ProductCode.Length > 0) ? productDto.ProductCode : codeService.GetProductCode(),
+      ProductCode = productDto.ProductCode,
       ProductName = productDto.ProductName,
+      ProductDescription = productDto.ProductDescription,
       BrandId = productDto.BrandId,
       CategoryId = productDto.CategoryId,
-      Cost = productDto.Cost,
-      Price = productDto.Price,
-      CreatedAt = DateTime.UtcNow,
+      Cost = (decimal)productDto.Cost,
+      Price = (decimal)productDto.Price,
+      CreatedAt = now,
       IsActive = true,
-      ProductDescription = productDto.ProductName
+      CreatedBy = userId
     };
 
     repo.Products.Add(newProduct);
+    
+    Stock stock = new() {
+      ProductId = newProduct.Id,
+      CostPrice = newProduct.Cost,
+      CreatedBy = userId,
+      CreatedAt = now,
+      Quantity = 0,
+      ReorderLevel = 0
+    };
+
+    repo.Stocks.Add(stock);
+    newProduct.StockId = stock.StockId;
     repo.SaveChanges();
 
     ProductResponse response = new() {

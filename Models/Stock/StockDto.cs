@@ -1,9 +1,14 @@
-using System.ComponentModel.DataAnnotations;
 namespace TheStore.Models.StockModel;
+public class NewStockDto {
+  public int Quantity { get; set; } = 0;
+  public int ReorderLevel { get; set; } = 0;
+  public decimal CostPrice { get; set; }
+  public Guid ProductId { get; set; }
+}
 
-public class StockDto {
-  [Required]
-  public int Warehouse { get; set; } = 0;
-  [Required]
-  public int Shop { get; set; } = 0;
+
+public class UpdateStockDto {
+  public int Quantity { get; set; } = 0;
+  public int ReorderLevel { get; set; } = 0;
+  public decimal CostPrice { get; set; }
 }

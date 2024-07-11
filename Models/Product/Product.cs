@@ -5,7 +5,8 @@ using TheStore.Models.StockModel;
 namespace TheStore.Models;
 
 [Index(nameof(ProductCode), IsUnique = true)]
-[Index(nameof(ProductName), IsUnique = true)]
+[Index(nameof(StockId), IsUnique = true)]
+// [Index(nameof(ProductName), IsUnique = true)]
 
 public class Product {
   [Key]
@@ -14,12 +15,12 @@ public class Product {
   public string ProductCode { get; set; } = string.Empty;
   public string ProductName { get; set; } = string.Empty;
   public string ProductDescription { get; set; } = string.Empty;
-  public int PictureId { get; set; }
+  public int? PictureId { get; set; }
   public Picture? Picture { get; set; }
   public bool IsActive { get; set; }
-  public double Cost { get; set; }
-  public double Price { get; set; }
-  public Guid StockId { get; set; }
+  public decimal Cost { get; set; }
+  public decimal Price { get; set; }
+  public Guid? StockId { get; set; }
   public Stock? StockLevel { get; set; }
   public Guid BrandId { get; set; }
   public Brand? Brand { get; set; }

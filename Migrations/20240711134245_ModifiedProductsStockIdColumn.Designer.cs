@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TheStore.Services;
@@ -12,9 +13,11 @@ using TheStore.Services;
 namespace TheStore.Migrations
 {
     [DbContext(typeof(RepoService))]
-    partial class RepoServiceModelSnapshot : ModelSnapshot
+    [Migration("20240711134245_ModifiedProductsStockIdColumn")]
+    partial class ModifiedProductsStockIdColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +185,7 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("PictureId")
+                    b.Property<int>("PictureId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
@@ -203,9 +206,6 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("StockId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("StockLevelStockId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
@@ -217,10 +217,7 @@ namespace TheStore.Migrations
                     b.HasIndex("ProductCode")
                         .IsUnique();
 
-                    b.HasIndex("StockId")
-                        .IsUnique();
-
-                    b.HasIndex("StockLevelStockId");
+                    b.HasIndex("StockId");
 
                     b.ToTable("Products");
                 });
@@ -230,9 +227,6 @@ namespace TheStore.Migrations
                     b.Property<Guid>("StockId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<decimal>("CostPrice")
-                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -246,19 +240,16 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("integer");
 
-                    b.HasKey("StockId");
+                    b.Property<int>("Shop")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.Property<int>("Warehouse")
+                        .HasColumnType("integer");
+
+                    b.HasKey("StockId");
 
                     b.ToTable("Stocks");
                 });
@@ -344,11 +335,13 @@ namespace TheStore.Migrations
 
                     b.HasOne("TheStore.Models.Picture", "Picture")
                         .WithMany()
-                        .HasForeignKey("PictureId");
+                        .HasForeignKey("PictureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TheStore.Models.StockModel.Stock", "StockLevel")
                         .WithMany()
-                        .HasForeignKey("StockLevelStockId");
+                        .HasForeignKey("StockId");
 
                     b.Navigation("Brand");
 

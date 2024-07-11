@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models.CategoryModel;
 using TheStore.Services.CategoryService;
@@ -11,6 +12,7 @@ public class CategoryController : ControllerBase {
     categoryService = _categoryService;
   }
 
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -21,6 +23,7 @@ public class CategoryController : ControllerBase {
     return Ok(response);
   }
 
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,7 +44,7 @@ public class CategoryController : ControllerBase {
     return Ok(response);
   }
 
-
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -52,7 +55,7 @@ public class CategoryController : ControllerBase {
     return Ok(res);
   }
 
-
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]

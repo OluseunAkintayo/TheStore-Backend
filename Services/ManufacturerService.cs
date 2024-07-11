@@ -10,7 +10,7 @@ public class ManufacturerService {
 
   public ManufacturerResponse GetManufacturers() {
     try {
-      var manufacturers = repo.Manufacturers.ToList();
+      var manufacturers = repo.Manufacturers.OrderBy(item => item.ManufacturerName).ToList();
       if(manufacturers == null) {
         var error = new ManufacturerResponse() {
           Message = "Error retrieving manufacturers",

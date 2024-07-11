@@ -149,7 +149,7 @@ public class AuthService {
       new(ClaimTypes.Email, user.Username),
       new(ClaimTypes.Role, user.Role.Contains("administrator") ? "administrator" : (user.Role.Contains("vendor") ? "vendor" : "customer" ))
     };
-    DateTime exp = DateTime.Now.AddMinutes(5);
+    DateTime exp = DateTime.Now.AddHours(6);
     var token = new JwtSecurityToken(
       config["Jwt:Issuer"],
       config["Jwt:Audience"],

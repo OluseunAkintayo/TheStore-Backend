@@ -11,7 +11,7 @@ public class CategoryService {
 
   public CategoryResponse GetAllcategories() {
     try {
-      var categories = repo.Categories.ToList();
+      var categories = repo.Categories.OrderBy(item => item.CategoryName).ToList();
       if(categories == null) {
         var error = new CategoryResponse() {
           Message = "Error retrieving product categories",
