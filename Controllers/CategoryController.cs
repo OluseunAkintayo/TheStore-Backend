@@ -4,7 +4,7 @@ using TheStore.Services.CategoryService;
 namespace TheStore.Controllers;
 
 [ApiController]
-[Route("api/products/category")]
+[Route("api/products/categories")]
 public class CategoryController : ControllerBase {
   private readonly CategoryService categoryService;
   public CategoryController(CategoryService _categoryService) {

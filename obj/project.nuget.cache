@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MSUwtNRjGFukbfP6QM0W2BPWj/vhgdN/GwpU4OwYjPtyot1oP/P1fIgE4+nZm5TK3gqgi8nt4C74LVTYhKR2Ew==",
+  "dgSpecHash": "WjaELdyiYoBbxsKl1Ik5fnB4s9gk2q+dK0oAKjqbukMqtvq4KPmdm8CMBIE1My/V4uFdFuIuCvTk02KCIPzRTA==",
   "success": true,
-  "projectFilePath": "/Users/oluseun/Projects/TheStoreFull/TheStore/TheStore.csproj",
+  "projectFilePath": "/Users/oluseun/Projects/TheStore/TheStore/TheStore.csproj",
   "expectedPackageFiles": [
     "/Users/oluseun/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/oluseun/.nuget/packages/bouncycastle.cryptography/2.4.0/bouncycastle.cryptography.2.4.0.nupkg.sha512",

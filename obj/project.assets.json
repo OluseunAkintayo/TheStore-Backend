@@ -2552,11 +2552,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/oluseun/Projects/TheStoreFull/TheStore/TheStore.csproj",
+      "projectUniqueName": "/Users/oluseun/Projects/TheStore/TheStore/TheStore.csproj",
       "projectName": "TheStore",
-      "projectPath": "/Users/oluseun/Projects/TheStoreFull/TheStore/TheStore.csproj",
+      "projectPath": "/Users/oluseun/Projects/TheStore/TheStore/TheStore.csproj",
       "packagesPath": "/Users/oluseun/.nuget/packages/",
-      "outputPath": "/Users/oluseun/Projects/TheStoreFull/TheStore/obj/",
+      "outputPath": "/Users/oluseun/Projects/TheStore/TheStore/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/oluseun/.nuget/NuGet/NuGet.Config"

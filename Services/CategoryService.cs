@@ -61,17 +61,17 @@ public class CategoryService {
   }
  
   public CategoryResponse CreateCategory(CategoryDto categoryDto) {
-    var category = repo.Categories.FirstOrDefault(item => item.CategoryName == categoryDto.Name);
+    var category = repo.Categories.FirstOrDefault(item => item.CategoryName == categoryDto.CategoryName);
     if (category != null) {
       var error = new CategoryResponse() {
         Success = false,
-        Message = $"Duplicate Error: Category name {categoryDto.Name} already exists. Please enter a unique category name",
+        Message = $"Duplicate Error: Category name {categoryDto.CategoryName} already exists. Please enter a unique category name",
       };
       return error;
     }
 
     Category newCategory = new() {
-      CategoryName = categoryDto.Name,
+      CategoryName = categoryDto.CategoryName,
       Description = categoryDto.Description,
       IsActive = true,
       CreatedAt = DateTime.UtcNow
@@ -98,7 +98,7 @@ public class CategoryService {
       return error;
     }
 
-    item.CategoryName = category.Name;
+    item.CategoryName = category.CategoryName;
     item.Description = category.Description;
     item.ModifiedAt = DateTime.UtcNow;
     repo.SaveChanges();

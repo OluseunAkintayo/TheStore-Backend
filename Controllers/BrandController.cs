@@ -12,10 +12,12 @@ public class BrandController : ControllerBase {
     brandService = _brandService;
   }
 
+
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  [HttpPost("", Name = "NewBrand")]
+  [HttpPost("new", Name = "NewBrand")]
   public ActionResult<BrandResponse> NewBrand([FromBody] BrandDto brandDto){
     var response = brandService.CreateBrand(brandDto);
     if(!response.Success) return BadRequest(response);
@@ -23,8 +25,8 @@ public class BrandController : ControllerBase {
   }
 
 
-
-  [HttpGet("", Name = "GetAllBrands")]
+  [Authorize]
+  [HttpGet("list", Name = "GetAllBrands")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -45,7 +47,7 @@ public class BrandController : ControllerBase {
   }
 
 
-  [Authorize(Roles = "administrator")]
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,7 +59,7 @@ public class BrandController : ControllerBase {
   }
 
 
-  [Authorize(Roles = "administrator")]
+  [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
