@@ -13,8 +13,8 @@ using TheStore.Services;
 namespace TheStore.Migrations
 {
     [DbContext(typeof(RepoService))]
-    [Migration("20240711144407_UpdatedStockTable")]
-    partial class UpdatedStockTable
+    [Migration("20240715175409_EditCategoriesTable")]
+    partial class EditCategoriesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,9 @@ namespace TheStore.Migrations
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -203,10 +206,10 @@ namespace TheStore.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("StockId")
+                    b.Property<Guid>("StockId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("StockLevelStockId")
+                    b.Property<Guid?>("StockId1")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -223,7 +226,7 @@ namespace TheStore.Migrations
                     b.HasIndex("StockId")
                         .IsUnique();
 
-                    b.HasIndex("StockLevelStockId");
+                    b.HasIndex("StockId1");
 
                     b.ToTable("Products");
                 });
@@ -349,9 +352,9 @@ namespace TheStore.Migrations
                         .WithMany()
                         .HasForeignKey("PictureId");
 
-                    b.HasOne("TheStore.Models.StockModel.Stock", "StockLevel")
+                    b.HasOne("TheStore.Models.StockModel.Stock", "Stock")
                         .WithMany()
-                        .HasForeignKey("StockLevelStockId");
+                        .HasForeignKey("StockId1");
 
                     b.Navigation("Brand");
 
@@ -359,7 +362,7 @@ namespace TheStore.Migrations
 
                     b.Navigation("Picture");
 
-                    b.Navigation("StockLevel");
+                    b.Navigation("Stock");
                 });
 #pragma warning restore 612, 618
         }

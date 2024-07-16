@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models.StockModel;
 using TheStore.Models.Users;
@@ -15,6 +14,18 @@ public class StockController : ControllerBase {
   public StockController(StockService _stockService) {
     stockService = _stockService;
   }
+
+  [HttpGet("list", Name = "GetStocks")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public ActionResult<ProductStockResponse> GetStocks() {
+    var response = stockService.ListStock();
+    if(!response.Success) return BadRequest(response);
+    return Ok(response);
+  }
+
 
   [HttpGet("/update/{stockId}", Name = "GetStock"), Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]

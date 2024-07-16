@@ -13,8 +13,8 @@ using TheStore.Services;
 namespace TheStore.Migrations
 {
     [DbContext(typeof(RepoService))]
-    [Migration("20240711134245_ModifiedProductsStockIdColumn")]
-    partial class ModifiedProductsStockIdColumn
+    [Migration("20240715184028_AddedDeletedColumnTOAllTables")]
+    partial class AddedDeletedColumnTOAllTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace TheStore.Migrations
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -80,6 +83,9 @@ namespace TheStore.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -112,6 +118,9 @@ namespace TheStore.Migrations
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -176,6 +185,9 @@ namespace TheStore.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -185,7 +197,7 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("PictureId")
+                    b.Property<int?>("PictureId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
@@ -203,7 +215,10 @@ namespace TheStore.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("StockId")
+                    b.Property<Guid>("StockId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("StockId1")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -217,7 +232,10 @@ namespace TheStore.Migrations
                     b.HasIndex("ProductCode")
                         .IsUnique();
 
-                    b.HasIndex("StockId");
+                    b.HasIndex("StockId")
+                        .IsUnique();
+
+                    b.HasIndex("StockId1");
 
                     b.ToTable("Products");
                 });
@@ -227,6 +245,9 @@ namespace TheStore.Migrations
                     b.Property<Guid>("StockId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -240,16 +261,19 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Shop")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Warehouse")
-                        .HasColumnType("integer");
-
                     b.HasKey("StockId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.ToTable("Stocks");
                 });
@@ -262,6 +286,9 @@ namespace TheStore.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -335,13 +362,11 @@ namespace TheStore.Migrations
 
                     b.HasOne("TheStore.Models.Picture", "Picture")
                         .WithMany()
-                        .HasForeignKey("PictureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PictureId");
 
-                    b.HasOne("TheStore.Models.StockModel.Stock", "StockLevel")
+                    b.HasOne("TheStore.Models.StockModel.Stock", "Stock")
                         .WithMany()
-                        .HasForeignKey("StockId");
+                        .HasForeignKey("StockId1");
 
                     b.Navigation("Brand");
 
@@ -349,7 +374,7 @@ namespace TheStore.Migrations
 
                     b.Navigation("Picture");
 
-                    b.Navigation("StockLevel");
+                    b.Navigation("Stock");
                 });
 #pragma warning restore 612, 618
         }

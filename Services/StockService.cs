@@ -8,9 +8,34 @@ public class StockService {
     repo = _repo;
   }
 
-  // public StockResponse GetStock() {
-  //   return null;
-  // }
+  public ProductStockResponse ListStock() {
+    // var stocks = repo.Stocks.ToList();
+    var stocks = (
+      from s in repo.Stocks
+      join p in repo.Products on s.ProductId equals p.Id
+      select new StockItems() {
+        StockId = s.StockId,
+        ProductId = s.ProductId,
+        ProductName = p.ProductName,
+        Quantity = s.Quantity,
+        Cost = p.Cost,
+        Price = p.Price,
+        CreatedAt = p.CreatedAt
+      }
+    ).ToList();
+    if(stocks == null) {
+      var error = new ProductStockResponse() {
+        Message = "Error retrieving items",
+        Success = false
+      };
+    }
+    var response = new ProductStockResponse() {
+      Message = "Items retrieved successfully",
+      Success = true,
+      Data = stocks
+    };
+    return response;
+  }
 
   public StockResponse UpdateStock(Guid Id, UpdateStockDto stockDto, Guid userId) {
     var stock = repo.Stocks.Find(Id);

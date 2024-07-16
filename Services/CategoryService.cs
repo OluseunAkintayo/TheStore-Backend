@@ -11,7 +11,7 @@ public class CategoryService {
 
   public CategoryResponse GetAllcategories() {
     try {
-      var categories = repo.Categories.OrderBy(item => item.CategoryName).ToList();
+      var categories = repo.Categories.Where(item => !item.Deleted).OrderBy(item => item.CategoryName).ToList();
       if(categories == null) {
         var error = new CategoryResponse() {
           Message = "Error retrieving product categories",
@@ -34,9 +34,9 @@ public class CategoryService {
     }
   }
 
-  public CategoryResponse GetCategory(Guid id) {
+  public CategoryItemResponse GetCategory(Guid id) {
     if(id == Guid.Empty) {
-      var error = new CategoryResponse() {
+      var error = new CategoryItemResponse() {
         Success = false,
         Message = "Category ID cannot be empty"
       };
@@ -45,25 +45,25 @@ public class CategoryService {
 
     var category = repo.Categories.Find(id);
     if(category == null) {
-      var error = new CategoryResponse() {
+      var error = new CategoryItemResponse() {
         Success = false,
         Message = "Category not found"
       };
       return error;
     }
     
-    var response = new CategoryResponse() {
-      Data = new List<Category>(){ category },
+    var response = new CategoryItemResponse() {
+      Data = category,
       Success = true,
       Message = "Product category retrieved successfully"
     };
     return response;
   }
  
-  public CategoryResponse CreateCategory(CategoryDto categoryDto) {
+  public CategoryItemResponse CreateCategory(CategoryDto categoryDto) {
     var category = repo.Categories.FirstOrDefault(item => item.CategoryName == categoryDto.CategoryName);
     if (category != null) {
-      var error = new CategoryResponse() {
+      var error = new CategoryItemResponse() {
         Success = false,
         Message = $"Duplicate Error: Category name {categoryDto.CategoryName} already exists. Please enter a unique category name",
       };
@@ -74,24 +74,25 @@ public class CategoryService {
       CategoryName = categoryDto.CategoryName,
       Description = categoryDto.Description,
       IsActive = true,
+      Deleted = false,
       CreatedAt = DateTime.UtcNow
     };
     
     repo.Categories.Add(newCategory);
     repo.SaveChanges();
 
-    var response = new CategoryResponse() {
+    var response = new CategoryItemResponse() {
       Success = true,
       Message = "Product category created successfully",
-      Data = new List<Category>() { newCategory }
+      Data = newCategory
     };
     return response;
   }
 
-  public CategoryResponse UpdateCategory(Guid id, CategoryDto category) {
+  public CategoryItemResponse UpdateCategory(Guid id, EditCategoryDto category) {
     var item = repo.Categories.Find(id);
     if(item == null) {
-      var error = new CategoryResponse() {
+      var error = new CategoryItemResponse() {
         Message = "Category not found",
         Success = false
       };
@@ -100,34 +101,37 @@ public class CategoryService {
 
     item.CategoryName = category.CategoryName;
     item.Description = category.Description;
+    item.IsActive = category.IsActive;
     item.ModifiedAt = DateTime.UtcNow;
     repo.SaveChanges();
 
-    CategoryResponse response = new() {
+    CategoryItemResponse response = new() {
       Success = true,
       Message = "Category updated successfully",
-      Data = new List<Category>() { item }
+      Data = item
     };
     return response;
   }
 
-  public CategoryResponse DeactivateCategory(Guid id) {
+  public CategoryItemResponse DeactivateCategory(Guid id) {
     var item = repo.Categories.Find(id);
     if(item == null) {
-      var error = new CategoryResponse() {
+      var error = new CategoryItemResponse() {
         Message = "Category not found",
         Success = false
       };
       return error;
     }
+    
     item.IsActive = false;
+    item.Deleted = true;
     item.ModifiedAt = DateTime.UtcNow;
 
     repo.SaveChanges();
-    var response = new CategoryResponse() {
+
+    var response = new CategoryItemResponse() {
       Message = "Category deactivated",
-      Success = true,
-      Data = new List<Category>() { item }
+      Success = true
     };
     return response;
   }

@@ -10,7 +10,7 @@ public class BrandService {
   }
 
   public BrandResponse GetAllBrands() {
-    var brands = repo.Brands.OrderBy(item => item.BrandName).ToList();
+    var brands = repo.Brands.Where(item => !item.Deleted).OrderBy(item => item.BrandName).ToList();
     if(brands == null) {
       var error = new BrandResponse() {
         Message = "Error retrieving brands",
@@ -26,9 +26,9 @@ public class BrandService {
     return response;
   }
 
-  public BrandResponse GetBrand(Guid id) {
+  public BrandItemResponse GetBrand(Guid id) {
     if(id == Guid.Empty) {
-      var error = new BrandResponse() {
+      var error = new BrandItemResponse() {
         Success = false,
         Message = "Brand ID cannot be empty"
       };
@@ -37,25 +37,25 @@ public class BrandService {
 
     var brand = repo.Brands.Find(id);
     if(brand == null) {
-      var error = new BrandResponse() {
+      var error = new BrandItemResponse() {
         Success = false,
         Message = "Brand not found"
       };
       return error;
     }
     
-    var response = new BrandResponse() {
-      Data = new List<Brand>(){ brand },
+    var response = new BrandItemResponse() {
+      Data = brand ,
       Success = true,
       Message = "Brand retrieved successfully"
     };
     return response;
   }
  
-  public BrandResponse CreateBrand(BrandDto brandDto) {
+  public BrandItemResponse CreateBrand(BrandDto brandDto) {
     var product = repo.Brands.FirstOrDefault(item => item.BrandName == brandDto.BrandName);
     if (product != null) {
-      var error = new BrandResponse() {
+      var error = new BrandItemResponse() {
         Success = false,
         Message = $"Duplicate Error: Brand name {brandDto.BrandName} already exists. Please enter a unique brand name",
       };
@@ -66,22 +66,23 @@ public class BrandService {
       BrandName = brandDto.BrandName,
       ManufacturerId = brandDto.ManufacturerId,
       CreatedAt = DateTime.UtcNow,
-      IsActive = brandDto.IsActive
+      IsActive = brandDto.IsActive,
+      Deleted = false
     };
     
     repo.Brands.Add(newBrand);
     repo.SaveChanges();
-    var response = new BrandResponse() {
+    var response = new BrandItemResponse() {
       Success = true,
       Message = "The brand was created successfully"
     };
     return response;
   }
 
-  public BrandResponse UpdateBrand(Guid id, BrandDto brand) {
+  public BrandItemResponse UpdateBrand(Guid id, BrandDto brand) {
     var item = repo.Brands.Find(id);
     if(item == null) {
-      var error = new BrandResponse() {
+      var error = new BrandItemResponse() {
         Message = "Brand not found",
         Success = false
       };
@@ -94,31 +95,31 @@ public class BrandService {
     item.IsActive = brand.IsActive;
 
     repo.SaveChanges();
-    BrandResponse response = new() {
+    BrandItemResponse response = new() {
       Success = true,
       Message = "Brand updated successfully",
-      Data = new List<Brand>() { item }
+      Data = item
     };
     return response;
   }
 
-  public BrandResponse DeactivateBrand(Guid id) {
+  public BrandItemResponse DeactivateBrand(Guid id) {
     var item = repo.Brands.Find(id);
     if(item == null) {
-      var error = new BrandResponse() {
+      var error = new BrandItemResponse() {
         Message = "Brand not found",
         Success = false
       };
       return error;
     }
     item.IsActive = false;
+    item.Deleted = true;
     item.ModifiedAt = DateTime.UtcNow;
 
     repo.SaveChanges();
-    var response = new BrandResponse() {
+    var response = new BrandItemResponse() {
       Message = "Brand deactivated",
-      Success = true,
-      Data = new List<Brand>() { item }
+      Success = true
     };
     return response;
   }

@@ -11,12 +11,40 @@ public class ProductService {
     codeService = _codeService;
   }
 
-  public ProductResponse GetProducts() {
-    List<Product> Products = repo.Products
+  
+  public ProductResponse GetAdminProducts() {
+    var products = repo.Products
       // .Include(item => item.Brand)
       // .Include(item => item.Category)
-      .Include(item => item.StockLevel)
+      .Include(item => item.Stock)
       .ToList();
+    
+    // var products = (
+    //   from prods in repo.Products
+    //   join stocks in repo.Stocks on prods.StockId equals stocks.ProductId
+    //   select new Product {
+    //     Id = prods.Id,
+    //     ProductCode = prods.ProductCode,
+    //     ProductName = prods.ProductName,
+    //   }
+    // ).ToList();
+    
+    if(products == null) {
+      return new ProductResponse() {
+        Success = false,
+        Message = "Error fetching products",
+      };
+    }
+
+    return new ProductResponse() {
+      Success = true,
+      Message = "Fetched products successfully",
+      Data = products
+    };
+  }
+  
+  public ProductResponse GetProducts() {
+    List<Product> Products = repo.Products.Where(item => !item.Deleted).ToList();
     if(Products == null) {
       return new ProductResponse() {
         Success = false,
@@ -31,18 +59,9 @@ public class ProductService {
     };
   }
 
-  public ProductResponse NewProduct(ProductDTO productDto, Guid userId) {
-    // Product? product = repo.Products.FirstOrDefault(item => item.ProductName == productDto.ProductName);
-    // if (product != null) {
-    //   var error = new ProductResponse() {
-    //     Success = false,
-    //     Message = $"Duplicate Error: {productDto.ProductName} already exists. Please enter a unique product name",
-    //   };
-    //   return error;
-    // }
-
+  public ProductItemResponse NewProduct(ProductDTO productDto, Guid userId) {
     if (productDto.Cost > productDto.Price) {
-      var error = new ProductResponse() {
+      var error = new ProductItemResponse() {
         Success = false,
         Message = $"Pricing Error: Product cost cannot be greater than the price.",
       };
@@ -54,14 +73,15 @@ public class ProductService {
     Product newProduct = new() {
       ProductCode = productDto.ProductCode,
       ProductName = productDto.ProductName,
-      ProductDescription = productDto.ProductDescription,
+      ProductDescription = productDto.Description,
       BrandId = productDto.BrandId,
       CategoryId = productDto.CategoryId,
       Cost = (decimal)productDto.Cost,
       Price = (decimal)productDto.Price,
       CreatedAt = now,
       IsActive = true,
-      CreatedBy = userId
+      CreatedBy = userId,
+      Deleted = false
     };
 
     repo.Products.Add(newProduct);
@@ -79,8 +99,8 @@ public class ProductService {
     newProduct.StockId = stock.StockId;
     repo.SaveChanges();
 
-    ProductResponse response = new() {
-      Data = new List<Product>(){ newProduct },
+    ProductItemResponse response = new() {
+      Data = newProduct,
       Success = true,
       Message = "The product was created successfully",
     };
@@ -88,26 +108,26 @@ public class ProductService {
   }
 
 
-  public ProductResponse GetProduct(Guid id) {
+  public ProductItemResponse GetProduct(Guid id) {
     Product? product = repo.Products.Find(id);
     if (product == null) {
-      return new ProductResponse {
+      return new ProductItemResponse {
         Success = false,
         Message = $"Product not found",
       };
     }
 
-    return new ProductResponse() {
-      Data = new List<Product> { product },
+    return new ProductItemResponse() {
+      Data = product,
       Success = true,
       Message = "The product was retrieved successfully",
     };
   }
 
-  public ProductResponse UpdateProduct(Guid id, ProductDTO productDto) {
+  public ProductItemResponse UpdateProduct(Guid id, ProductDTO productDto) {
     Product? product = repo.Products.FirstOrDefault(item => item.Id == id);
     if (product == null) {
-      return new ProductResponse {
+      return new ProductItemResponse {
         Success = false,
         Message = "Product not found",
       };
@@ -119,14 +139,39 @@ public class ProductService {
     product.CategoryId = productDto.CategoryId;
     product.Cost = productDto.Cost;
     product.Price = productDto.Price;
-    product.IsActive = true;
-    product.ProductDescription = productDto.ProductName;
+    product.IsActive = productDto?.IsActive ?? product.IsActive;
+    product.ProductDescription = productDto.Description;
     product.ModifiedAt = DateTime.UtcNow;
+
     repo.SaveChanges();
-    return new ProductResponse {
+    
+    return new ProductItemResponse {
       Success = true,
       Message = "The product has been updated",
-      Data = new List<Product> { product }
+      Data = product
     };
+  }
+
+  public ProductItemResponse DeleteProduct(Guid Id, Guid userId) {
+    var product = repo.Products.Find(Id);
+    if(product == null) {
+      ProductItemResponse error = new() {
+        Message = "Product not found",
+        Success = false
+      };
+      return error;
+    }
+    product.IsActive = false;
+    product.Deleted = true;
+    product.ModifiedAt = DateTime.UtcNow;
+    product.ModifiedBy = userId;
+    
+    // repo.Products.Remove(product);
+    repo.SaveChanges();
+    ProductItemResponse response = new() {
+      Success = true,
+      Message = "Product deleted successfully",
+    };
+    return response;
   }
 }

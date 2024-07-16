@@ -19,7 +19,7 @@ public class ProductController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult<ProductResponse> NewProduct([FromBody] ProductDTO productDto){
+  public ActionResult NewProduct([FromBody] ProductDTO productDto){
     UserClaims? user = GetCurrentUser();
     var response = productService.NewProduct(productDto, Guid.Parse(user!.UserId));
     if(!response.Success) return BadRequest(response);
@@ -27,11 +27,23 @@ public class ProductController : ControllerBase {
   }
 
 
+  [HttpGet("admin/list", Name = "GetAdminProducts")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public ActionResult GetAdminProducts(){
+    var response = productService.GetAdminProducts();
+    if(!response.Success) return BadRequest(response);
+    return Ok(response);
+  }
+
+  
   [HttpGet("list", Name = "GetProducts")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult<ProductResponse> GetProducts(){
+  public ActionResult GetProducts(){
     var response = productService.GetProducts();
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -41,7 +53,7 @@ public class ProductController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult<ProductResponse> GetProduct(Guid id){
+  public ActionResult GetProduct(Guid id){
     var response = productService.GetProduct(id);
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -58,6 +70,17 @@ public class ProductController : ControllerBase {
     return Ok(res);
   }
 
+  [HttpDelete("delete/{id}"), Authorize]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public ActionResult DeleteProduct(Guid Id) {
+    UserClaims? user = GetCurrentUser();
+    var response = productService.DeleteProduct(Id, Guid.Parse(user.UserId));
+    if(!response.Success) return BadRequest(response);
+    return Ok(response);
+  }
 
   // get current user from token
   private UserClaims? GetCurrentUser(){

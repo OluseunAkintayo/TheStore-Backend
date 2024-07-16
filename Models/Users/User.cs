@@ -18,6 +18,7 @@ public class User {
   public List<string> Role { get; set; } = new List<string>(){ "" };
   [Required]
   public bool IsActive { get; set; }
+  public bool Deleted { get; set; }
   public string VerificationToken { get; set; } = string.Empty;
   public DateTime? VerificationDate { get; set; }
   public string? PasswordResetToken { get; set; } = string.Empty;

@@ -18,7 +18,7 @@ public class BrandController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpPost("new", Name = "NewBrand")]
-  public ActionResult<BrandResponse> NewBrand([FromBody] BrandDto brandDto){
+  public ActionResult NewBrand([FromBody] BrandDto brandDto){
     var response = brandService.CreateBrand(brandDto);
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -30,7 +30,7 @@ public class BrandController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult<BrandResponse> GetAllBrands(){
+  public ActionResult GetAllBrands(){
     var response = brandService.GetAllBrands();
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -41,7 +41,7 @@ public class BrandController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpGet("{id}", Name = "GetBrand")]
-  public ActionResult<BrandResponse> GetBrand(Guid id){
+  public ActionResult GetBrand(Guid id){
     var response = brandService.GetBrand(id);
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -65,7 +65,7 @@ public class BrandController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpPost("deactivate/{id}", Name = "DeactivateBrand")]
-  public ActionResult<BrandResponse> DeactivateBrand(Guid id){
+  public ActionResult DeactivateBrand(Guid id){
     var response = brandService.DeactivateBrand(id);
     if(!response.Success) return BadRequest(response);
     return Ok(response);

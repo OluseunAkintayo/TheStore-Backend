@@ -18,10 +18,11 @@ public class Product {
   public int? PictureId { get; set; }
   public Picture? Picture { get; set; }
   public bool IsActive { get; set; }
+  public bool Deleted { get; set; }
   public decimal Cost { get; set; }
   public decimal Price { get; set; }
-  public Guid? StockId { get; set; }
-  public Stock? StockLevel { get; set; }
+  public Guid StockId { get; set; }
+  public Stock? Stock { get; set; }
   public Guid BrandId { get; set; }
   public Brand? Brand { get; set; }
   public Guid CategoryId { get; set; }

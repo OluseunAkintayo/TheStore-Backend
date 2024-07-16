@@ -17,7 +17,7 @@ public class CategoryController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpPost("new", Name = "NewCategory")]
-  public ActionResult<CategoryResponse> NewCategory([FromBody] CategoryDto brandDto){
+  public ActionResult NewCategory([FromBody] CategoryDto brandDto){
     var response = categoryService.CreateCategory(brandDto);
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -28,7 +28,7 @@ public class CategoryController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpGet("list", Name = "GetCategories")]
-  public ActionResult<CategoryResponse> GetCategories(){
+  public ActionResult GetCategories(){
     var response = categoryService.GetAllcategories();
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -38,7 +38,7 @@ public class CategoryController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpGet("{id}", Name = "GetCategory")]
-  public ActionResult<CategoryResponse> GetCategory(Guid id){
+  public ActionResult GetCategory(Guid id){
     var response = categoryService.GetCategory(id);
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -49,8 +49,8 @@ public class CategoryController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   [HttpPut("update/{id}", Name = "UpdateCategory")]
-  public ActionResult UpdateCategory(Guid id, [FromBody] CategoryDto brand){
-    var res = categoryService.UpdateCategory(id, brand);
+  public ActionResult UpdateCategory(Guid id, [FromBody] EditCategoryDto category){
+    var res = categoryService.UpdateCategory(id, category);
     if(!res.Success) return BadRequest(res);
     return Ok(res);
   }
@@ -59,8 +59,8 @@ public class CategoryController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  [HttpPut("deactivate/{id}", Name = "DeactivateCategory")]
-  public ActionResult<CategoryResponse> DeactivateCategory(Guid id){
+  [HttpDelete("delete/{id}", Name = "DeleteCategory")]
+  public ActionResult DeleteCategory(Guid id){
     var response = categoryService.DeactivateCategory(id);
     if(!response.Success) return BadRequest(response);
     return Ok(response);

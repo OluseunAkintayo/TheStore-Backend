@@ -10,6 +10,7 @@ public class Manufacturer {
   [Required]
   public string ManufacturerName { get; set; } = string.Empty;
   public bool IsActive { get; set; }
+  public bool Deleted { get; set; }
   public Guid CreatedBy { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
