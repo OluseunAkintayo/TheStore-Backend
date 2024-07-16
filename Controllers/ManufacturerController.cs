@@ -21,6 +21,13 @@ public class ManufacturerController : ControllerBase {
   [HttpPost("new", Name = "NewManufacturer")]
   public ActionResult NewManufacturer([FromBody] ManufacturerDto manufacturerDto){
     UserClaims? claims = GetCurrentUser();
+    if(claims?.UserId == null) {
+      var error = new {
+        Success = false,
+        Message = "Unauthorized access"
+      };
+      return Unauthorized(error);
+    }
     var response = manufacturerService.CreateManufacturer(manufacturerDto, Guid.Parse(claims!.UserId));
     if(!response.Success) return BadRequest(response);
     return Ok(response);
@@ -59,6 +66,13 @@ public class ManufacturerController : ControllerBase {
   [HttpPut("update/{id}", Name = "UpdateManufacturer")]
   public ActionResult UpdateManufacturer(Guid id, [FromBody] EditManufacturerDto manufacturer){
     UserClaims? claims = GetCurrentUser();
+    if(claims?.UserId == null) {
+      var error = new {
+        Success = false,
+        Message = "Unauthorized access"
+      };
+      return Unauthorized(error);
+    }
     var res = manufacturerService.UpdateManufacturer(id, manufacturer, Guid.Parse(claims.UserId));
     if(!res.Success) return BadRequest(res);
     return Ok(res);
@@ -71,7 +85,14 @@ public class ManufacturerController : ControllerBase {
   [HttpDelete("delete/{id}", Name = "DeactivateManufacturer")]
   public ActionResult<ManufacturerResponse> DeactivateManufacturer(Guid id){
     UserClaims? claims = GetCurrentUser();
-    var response = manufacturerService.DeactivateManufacturer(id, Guid.Parse(claims!.UserId));
+    if(claims?.UserId == null) {
+      var error = new {
+        Success = false,
+        Message = "Unauthorized access"
+      };
+      return Unauthorized(error);
+    }
+    var response = manufacturerService.DeactivateManufacturer(id, Guid.Parse(claims.UserId));
     if(!response.Success) return BadRequest(response);
     return Ok(response);
   }

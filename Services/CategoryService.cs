@@ -135,4 +135,50 @@ public class CategoryService {
     };
     return response;
   }
+
+  public CategoryResponse GetDeletedCategories() {
+    try {
+      var categories = repo.Categories.Where(item => item.Deleted).OrderBy(item => item.CategoryName).ToList();
+      if(categories == null) {
+        var error = new CategoryResponse() {
+          Message = "Error retrieving product categories",
+          Success = false
+        };
+        return error;
+      }
+      var response = new CategoryResponse() {
+        Data = categories,
+        Success = true,
+        Message = "Product categories retrieved successfully!"
+      };
+      return response;
+    } catch (Exception exception) {
+      var error = new CategoryResponse(){
+        Message = $"An error occurred: {exception.Message}",
+        Success = false
+      };
+      return error;
+    }
+  }
+
+  public CategoryItemResponse RestoreCategory(Guid id, Guid userId) {
+    var item = repo.Categories.Find(id);
+    if(item == null) {
+      var error = new CategoryItemResponse() {
+        Message = "Category not found",
+        Success = false
+      };
+      return error;
+    }
+    item.IsActive = true;
+    item.Deleted = false;
+    item.ModifiedAt = DateTime.UtcNow;
+    item.ModifiedBy = userId;
+    repo.SaveChanges();
+    var response = new CategoryItemResponse() {
+      Message = "Category restored successfully",
+      Success = true
+    };
+    return response;
+  }
 }
