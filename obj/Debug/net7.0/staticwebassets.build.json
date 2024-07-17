@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "34hBDI4tZD1//VhkGRTDj9E3bzh4ayRTKSBMZgMICZg=",
+  "Hash": "UDm1jX2l5pc/uxT/+P9X52vnsTWzYb8yLLSjyt9gmec=",
   "Source": "TheStore",
   "BasePath": "_content/TheStore",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "TheStore/wwwroot",
+      "Source": "TheStore",
+      "ContentRoot": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/",
+      "BasePath": "_content/TheStore",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

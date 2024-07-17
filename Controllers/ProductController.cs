@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using TheStore.Models;
 using TheStore.Models.Users;
+using TheStore.Services;
 using TheStore.Services.ProductService;
 namespace TheStore.Controllers;
 
@@ -10,8 +12,12 @@ namespace TheStore.Controllers;
 [Route("api/products")]
 public class ProductController : ControllerBase {
   private readonly ProductService productService;
-  public ProductController(ProductService _productService) {
+  private readonly UploadService uploadService;
+  private readonly RepoService repo;
+  public ProductController(ProductService _productService, RepoService _repo, UploadService _uploadService) {
     productService = _productService;
+    repo = _repo;
+    uploadService = _uploadService;
   }
 
   
@@ -33,9 +39,38 @@ public class ProductController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public ActionResult GetAdminProducts(){
-    var response = productService.GetAdminProducts();
-    if(!response.Success) return BadRequest(response);
-    return Ok(response);
+    // var response = productService.GetAdminProducts();
+    // if(!response.Success) return BadRequest(response);
+    var res = (
+      from product in repo.Products
+      join brand in repo.Brands
+      on product.BrandId equals brand.BrandId
+      join category in repo.Categories
+      on product.CategoryId equals category.CategoryId
+      join stock in repo.Stocks
+      on product.Id equals stock.ProductId
+      select new {
+        product.Id,
+        product.ProductName,
+        product.ProductDescription,
+        product.Price,
+        stock = new {
+          stock.StockId,
+          stock.Quantity,
+          stock.ReorderLevel,
+          stock.CostPrice
+        },
+        brand = new {
+          brand.BrandId,
+          brand.BrandName
+        },
+        category = new {
+          category.CategoryId,
+          category.CategoryName
+        }
+      }
+    ).ToList();
+    return Ok(res);
   }
 
   
@@ -80,6 +115,17 @@ public class ProductController : ControllerBase {
     var response = productService.DeleteProduct(Id, Guid.Parse(user.UserId));
     if(!response.Success) return BadRequest(response);
     return Ok(response);
+  }
+
+
+  [HttpPost("file/upload/{productId}")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public ActionResult UploadPicture(List<IFormFile> files, Guid productId) {
+    var res = uploadService.UploadPictures(files, productId);
+    if(!res.Success) return BadRequest(res);
+    return Ok(res);
   }
 
   // get current user from token

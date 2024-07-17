@@ -177,3 +177,4 @@
 /Users/oluseun/Projects/TheStore/TheStore/obj/Debug/net7.0/TheStore.pdb
 /Users/oluseun/Projects/TheStore/TheStore/obj/Debug/net7.0/TheStore.genruntimeconfig.cache
 /Users/oluseun/Projects/TheStore/TheStore/obj/Debug/net7.0/ref/TheStore.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/TheStore.staticwebassets.runtime.json

@@ -15,4 +15,5 @@ public class RepoService : DbContext {
   public DbSet<Category> Categories { get; set; }
   public DbSet<Stock> Stocks { get; set; }
   public DbSet<User> Users { get; set; }
+  public DbSet<Picture> Pictures { get; set; }
 }
