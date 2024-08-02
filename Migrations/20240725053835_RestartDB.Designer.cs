@@ -13,8 +13,8 @@ using TheStore.Services;
 namespace TheStore.Migrations
 {
     [DbContext(typeof(RepoService))]
-    [Migration("20240717151501_PictureUploadToDB")]
-    partial class PictureUploadToDB
+    [Migration("20240725053835_RestartDB")]
+    partial class RestartDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,16 +155,13 @@ namespace TheStore.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Data")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
                     b.Property<string>("Filename")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Uri")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("PictureId");
 
@@ -204,11 +201,9 @@ namespace TheStore.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("PictureId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("PictureId1")
-                        .HasColumnType("integer");
+                    b.Property<List<string>>("Pictures")
+                        .IsRequired()
+                        .HasColumnType("text[]");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
@@ -228,24 +223,13 @@ namespace TheStore.Migrations
                     b.Property<Guid>("StockId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("StockId1")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("PictureId1");
 
                     b.HasIndex("ProductCode")
                         .IsUnique();
 
                     b.HasIndex("StockId")
                         .IsUnique();
-
-                    b.HasIndex("StockId1");
 
                     b.ToTable("Products");
                 });
@@ -354,37 +338,6 @@ namespace TheStore.Migrations
                         .IsRequired();
 
                     b.Navigation("Manufacturer");
-                });
-
-            modelBuilder.Entity("TheStore.Models.Product", b =>
-                {
-                    b.HasOne("TheStore.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TheStore.Models.CategoryModel.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TheStore.Models.Picture", "Picture")
-                        .WithMany()
-                        .HasForeignKey("PictureId1");
-
-                    b.HasOne("TheStore.Models.StockModel.Stock", "Stock")
-                        .WithMany()
-                        .HasForeignKey("StockId1");
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Picture");
-
-                    b.Navigation("Stock");
                 });
 #pragma warning restore 612, 618
         }

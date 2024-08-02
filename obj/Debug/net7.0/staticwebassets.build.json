@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "UDm1jX2l5pc/uxT/+P9X52vnsTWzYb8yLLSjyt9gmec=",
+  "Hash": "DUqU2RtQo9npUAlJpWPFswEJTVd/xPOGK1DJ2SH5Zjs=",
   "Source": "TheStore",
   "BasePath": "_content/TheStore",
   "Mode": "Default",
@@ -15,5 +15,23 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/Uploads/Products/1234567890/placeholder.jpeg",
+      "SourceId": "TheStore",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/",
+      "BasePath": "_content/TheStore",
+      "RelativePath": "Uploads/Products/1234567890/placeholder.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Uploads/Products/1234567890/placeholder.jpeg"
+    }
+  ]
 }

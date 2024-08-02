@@ -1,16 +1,8 @@
 {
   "Files": [
     {
-      "Id": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/Transaction-Alert-BannerArtboard-2.jpg",
-      "PackagePath": "staticwebassets/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/Transaction-Alert-BannerArtboard-2.jpg"
-    },
-    {
-      "Id": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/placeholder.jpeg",
-      "PackagePath": "staticwebassets/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/placeholder.jpeg"
-    },
-    {
-      "Id": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/privacy-policy-banner.jpg",
-      "PackagePath": "staticwebassets/Uploads/Products/3fbaec91-8187-496b-828f-0f022f98d9b9/privacy-policy-banner.jpg"
+      "Id": "/Users/oluseun/Projects/TheStore/TheStore/wwwroot/Uploads/Products/1234567890/placeholder.jpeg",
+      "PackagePath": "staticwebassets/Uploads/Products/1234567890/placeholder.jpeg"
     },
     {
       "Id": "obj/Debug/net7.0/staticwebassets/msbuild.TheStore.Microsoft.AspNetCore.StaticWebAssets.props",

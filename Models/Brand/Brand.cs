@@ -10,7 +10,6 @@ public class Brand {
   [Required]
   public string BrandName { get; set; } = string.Empty;
   public Guid ManufacturerId { get; set; }
-  public Manufacturer? Manufacturer { get; set; }
   public bool IsActive { get; set; }
   public bool Deleted { get; set; }
   public DateTime CreatedAt { get; set; }

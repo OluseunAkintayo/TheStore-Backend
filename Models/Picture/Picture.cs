@@ -6,5 +6,4 @@ public class Picture {
   public string Filename { get; set; } = string.Empty;
   public string Uri { get; set; } = string.Empty;
   public string ContentType { get; set; } = string.Empty;
-  // public Guid ProductId { get; set; }
 }

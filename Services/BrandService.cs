@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TheStore.Models;
 namespace TheStore.Services.BrandService;
 
@@ -9,16 +8,27 @@ public class BrandService {
     repo = repoService;
   }
 
-  public BrandResponse GetAllBrands() {
-    var brands = repo.Brands.Where(item => !item.Deleted).OrderBy(item => item.BrandName).ToList();
+  public AllBrandsResponse GetAllBrands() {
+    var brands = (
+      from brand in repo.Brands
+      join manufacturer in repo.Manufacturers on brand.ManufacturerId equals manufacturer.Id
+      select new AllBrands() {
+        BrandId = brand.BrandId,
+        BrandName = brand.BrandName,
+        ManufacturerId = brand.ManufacturerId,
+        ManufacturerName = manufacturer.ManufacturerName,
+        CreatedAt = brand.CreatedAt
+      }
+    ).ToList();
+
     if(brands == null) {
-      var error = new BrandResponse() {
+      var error = new AllBrandsResponse() {
         Message = "Error retrieving brands",
         Success = false
       };
       return error;
     }
-    var response = new BrandResponse() {
+    var response = new AllBrandsResponse() {
       Data = brands,
       Success = true,
       Message = "Brands retrieved successfully!"

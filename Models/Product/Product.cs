@@ -20,11 +20,8 @@ public class Product {
   public decimal Cost { get; set; }
   public decimal Price { get; set; }
   public Guid StockId { get; set; }
-  public Stock? Stock { get; set; }
   public Guid BrandId { get; set; }
-  public Brand? Brand { get; set; }
   public Guid CategoryId { get; set; }
-  public Category? Category { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime? ModifiedAt { get; set; }
   public Guid CreatedBy { get; set; }

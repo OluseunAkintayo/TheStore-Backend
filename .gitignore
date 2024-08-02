@@ -2,3 +2,4 @@ appsettings.json
 .DS_Store
 bin
 .vs
+wwwroot/Uploads/Products/*

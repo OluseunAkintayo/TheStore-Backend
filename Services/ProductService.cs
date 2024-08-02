@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TheStore.Models;
 using TheStore.Models.StockModel;
 namespace TheStore.Services.ProductService;
@@ -6,37 +5,43 @@ namespace TheStore.Services.ProductService;
 public class ProductService {
   private readonly RepoService repo;
   private readonly ProductCodeService codeService;
-  public ProductService(RepoService repoService, ProductCodeService _codeService){
+  private readonly UploadService uploadService;
+  public ProductService(RepoService repoService, ProductCodeService _codeService, UploadService _uploadService){
     repo = repoService;
     codeService = _codeService;
+    uploadService = _uploadService;
   }
 
-  
-  public ProductResponse GetAdminProducts() {
-    var products = repo.Products
-      // .Include(item => item.Brand)
-      // .Include(item => item.Category)
-      .Include(item => item.Stock)
-      .ToList();
-    
-    // var products = (
-    //   from prods in repo.Products
-    //   join stocks in repo.Stocks on prods.StockId equals stocks.ProductId
-    //   select new Product {
-    //     Id = prods.Id,
-    //     ProductCode = prods.ProductCode,
-    //     ProductName = prods.ProductName,
-    //   }
-    // ).ToList();
-    
+  public AdminProductResponse GetAdminProducts() {
+    var products = (
+      from product in repo.Products
+      join brand in repo.Brands on product.BrandId equals brand.BrandId
+      join category in repo.Categories on product.CategoryId equals category.CategoryId
+      join stock in repo.Stocks on product.Id equals stock.ProductId
+      select new AdminProduct() {
+        Id = product.Id,
+        ProductName = product.ProductName,
+        ProductDescription = product.ProductDescription,
+        CostPrice = product.Cost,
+        Price = product.Price,
+        StockId = stock.StockId,
+        Quantity = stock.Quantity,
+        ReorderLevel = stock.ReorderLevel,
+        BrandId = brand.BrandId,
+        BrandName = brand.BrandName,
+        CategoryId = category.CategoryId,
+        CategoryName = category.CategoryName
+      }
+    ).ToList();
+
     if(products == null) {
-      return new ProductResponse() {
+      return new AdminProductResponse() {
         Success = false,
         Message = "Error fetching products",
       };
     }
 
-    return new ProductResponse() {
+    return new AdminProductResponse() {
       Success = true,
       Message = "Fetched products successfully",
       Data = products
@@ -59,7 +64,7 @@ public class ProductService {
     };
   }
 
-  public ProductItemResponse NewProduct(ProductDTO productDto, Guid userId) {
+  public ProductItemResponse NewProduct(ProductDTO productDto, Guid userId, List<IFormFile> Pictures) {
     if (productDto.Cost > productDto.Price) {
       var error = new ProductItemResponse() {
         Success = false,
@@ -69,7 +74,6 @@ public class ProductService {
     }
 
     DateTime now = DateTime.UtcNow;
-
     Product newProduct = new() {
       ProductCode = productDto.ProductCode,
       ProductName = productDto.ProductName,
@@ -78,10 +82,11 @@ public class ProductService {
       CategoryId = productDto.CategoryId,
       Cost = (decimal)productDto.Cost,
       Price = (decimal)productDto.Price,
+      Pictures = uploadService.UploadPictures(Pictures, productDto.ProductCode).PictureUri,
       CreatedAt = now,
       IsActive = true,
       CreatedBy = userId,
-      Deleted = false
+      Deleted = false,
     };
 
     repo.Products.Add(newProduct);
@@ -133,14 +138,13 @@ public class ProductService {
       };
     }
 
-    product.ProductCode = (productDto.ProductCode != null && productDto.ProductCode.Length > 0) ? productDto.ProductCode : product.ProductCode;
     product.ProductName = productDto.ProductName;
     product.BrandId = productDto.BrandId;
     product.CategoryId = productDto.CategoryId;
     product.Cost = productDto.Cost;
     product.Price = productDto.Price;
     product.IsActive = productDto?.IsActive ?? product.IsActive;
-    product.ProductDescription = productDto.Description;
+    product.ProductDescription = productDto!.Description;
     product.ModifiedAt = DateTime.UtcNow;
 
     repo.SaveChanges();

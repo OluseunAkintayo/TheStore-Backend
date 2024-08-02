@@ -28,7 +28,7 @@ public class ManufacturerController : ControllerBase {
       };
       return Unauthorized(error);
     }
-    var response = manufacturerService.CreateManufacturer(manufacturerDto, Guid.Parse(claims!.UserId));
+    var response = manufacturerService.CreateManufacturer(manufacturerDto, Guid.Parse(claims.UserId));
     if(!response.Success) return BadRequest(response);
     return Ok(response);
   }
