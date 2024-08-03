@@ -20,9 +20,10 @@ public class ProductService {
       join stock in repo.Stocks on product.Id equals stock.ProductId
       select new AdminProduct() {
         Id = product.Id,
+        ProductCode = product.ProductCode,
         ProductName = product.ProductName,
         ProductDescription = product.ProductDescription,
-        CostPrice = product.Cost,
+        Cost = product.Cost,
         Price = product.Price,
         StockId = stock.StockId,
         Quantity = stock.Quantity,
@@ -30,9 +31,14 @@ public class ProductService {
         BrandId = brand.BrandId,
         BrandName = brand.BrandName,
         CategoryId = category.CategoryId,
-        CategoryName = category.CategoryName
+        CategoryName = category.CategoryName,
+        Pictures = product.Pictures,
+        IsActive = product.IsActive,
+        Deleted = product.Deleted,
+        CreatedBy = product.CreatedBy,
+        ModifiedAt = product.ModifiedAt
       }
-    ).ToList();
+    ).Where(item => !item.Deleted).ToList();
 
     if(products == null) {
       return new AdminProductResponse() {
@@ -64,7 +70,7 @@ public class ProductService {
     };
   }
 
-  public ProductItemResponse NewProduct(ProductDTO productDto, Guid userId, List<IFormFile> Pictures) {
+  public ProductItemResponse NewProduct(ProductDTO productDto, Guid userId) {
     if (productDto.Cost > productDto.Price) {
       var error = new ProductItemResponse() {
         Success = false,
@@ -82,7 +88,7 @@ public class ProductService {
       CategoryId = productDto.CategoryId,
       Cost = (decimal)productDto.Cost,
       Price = (decimal)productDto.Price,
-      Pictures = uploadService.UploadPictures(Pictures, productDto.ProductCode).PictureUri,
+      Pictures = productDto.Pictures,
       CreatedAt = now,
       IsActive = true,
       CreatedBy = userId,
@@ -112,7 +118,6 @@ public class ProductService {
     return response;
   }
 
-
   public ProductItemResponse GetProduct(Guid id) {
     Product? product = repo.Products.Find(id);
     if (product == null) {
@@ -129,7 +134,7 @@ public class ProductService {
     };
   }
 
-  public ProductItemResponse UpdateProduct(Guid id, ProductDTO productDto) {
+  public ProductItemResponse UpdateProduct(Guid id, EditProductDTO editProductDto) {
     Product? product = repo.Products.FirstOrDefault(item => item.Id == id);
     if (product == null) {
       return new ProductItemResponse {
@@ -138,13 +143,14 @@ public class ProductService {
       };
     }
 
-    product.ProductName = productDto.ProductName;
-    product.BrandId = productDto.BrandId;
-    product.CategoryId = productDto.CategoryId;
-    product.Cost = productDto.Cost;
-    product.Price = productDto.Price;
-    product.IsActive = productDto?.IsActive ?? product.IsActive;
-    product.ProductDescription = productDto!.Description;
+    product.ProductName = editProductDto.ProductName;
+    product.BrandId = editProductDto.BrandId;
+    product.CategoryId = editProductDto.CategoryId;
+    product.Cost = editProductDto.Cost;
+    product.Price = editProductDto.Price;
+    product.IsActive = editProductDto.IsActive;
+    product.ProductDescription = editProductDto.Description;
+    product.Pictures = editProductDto.Pictures;
     product.ModifiedAt = DateTime.UtcNow;
 
     repo.SaveChanges();

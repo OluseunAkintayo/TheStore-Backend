@@ -21,11 +21,11 @@ public class ProductController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult NewProduct([FromForm] ProductDTO productDto, List<IFormFile> Pictures){
+  public ActionResult NewProduct([FromBody] ProductDTO productDto){
     UserClaims? user = GetCurrentUser();
     if(user == null) return Unauthorized();
     if(user.UserId == null) return Unauthorized();
-    var response = productService.NewProduct(productDto, Guid.Parse(user.UserId), Pictures);
+    var response = productService.NewProduct(productDto, Guid.Parse(user.UserId));
     if(!response.Success) return BadRequest(response);
     return Ok(response);
   }
@@ -68,7 +68,7 @@ public class ProductController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public ActionResult UpdateProduct(Guid id, [FromBody] ProductDTO product){
+  public ActionResult UpdateProduct(Guid id, [FromForm] EditProductDTO product){
     var res = productService.UpdateProduct(id, product);
     if(!res.Success) return BadRequest(res);
     return Ok(res);

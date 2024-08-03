@@ -1,11 +1,7 @@
 using TheStore.Models;
-namespace TheStore.Services;
 
 public class UploadService {
-  private  readonly RepoService repo;
-  public UploadService(RepoService _repo){
-    repo = _repo;
-  }
+  public UploadService(){}
 
   public UploadPictureResponse UploadPictures(List<IFormFile> files, string productCode) {
     UploadPictureResponse response = new();

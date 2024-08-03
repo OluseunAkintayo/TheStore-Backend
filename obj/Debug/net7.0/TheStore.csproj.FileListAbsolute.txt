@@ -178,3 +178,10 @@
 /Users/oluseun/Projects/TheStore/TheStore/obj/Debug/net7.0/TheStore.genruntimeconfig.cache
 /Users/oluseun/Projects/TheStore/TheStore/obj/Debug/net7.0/ref/TheStore.dll
 /Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/TheStore.staticwebassets.runtime.json
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/FirebaseAuth.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/Firebase.Storage.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/jose-jwt.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/System.Net.Http.Formatting.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/Newtonsoft.Json.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/Newtonsoft.Json.Bson.dll
+/Users/oluseun/Projects/TheStore/TheStore/bin/Debug/net7.0/BouncyCastle.Crypto.dll

@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using TheStore.Models.CategoryModel;
-using TheStore.Models.StockModel;
 namespace TheStore.Models;
 
 [Index(nameof(ProductCode), IsUnique = true)]
