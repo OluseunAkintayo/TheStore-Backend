@@ -33,7 +33,7 @@ public class ManufacturerController : ControllerBase {
     return Ok(response);
   }
 
-  
+
   [Authorize]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,7 +46,7 @@ public class ManufacturerController : ControllerBase {
     return Ok(response);
   }
 
-  
+
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]

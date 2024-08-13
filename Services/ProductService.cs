@@ -4,12 +4,8 @@ namespace TheStore.Services.ProductService;
 
 public class ProductService {
   private readonly RepoService repo;
-  private readonly ProductCodeService codeService;
-  private readonly UploadService uploadService;
-  public ProductService(RepoService repoService, ProductCodeService _codeService, UploadService _uploadService){
+  public ProductService(RepoService repoService){
     repo = repoService;
-    codeService = _codeService;
-    uploadService = _uploadService;
   }
 
   public AdminProductResponse GetAdminProducts() {

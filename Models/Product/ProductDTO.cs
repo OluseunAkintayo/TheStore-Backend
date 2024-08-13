@@ -12,9 +12,8 @@ public class ProductDTO {
   public decimal Price { get; set; }
   public Guid BrandId { get; set; }
   public Guid CategoryId { get; set; }
-  public List<string> Pictures { get; set; }
+  public required List<string> Pictures { get; set; }
 }
-
 
 public class EditProductDTO {
   public string ProductCode { get; set; } = string.Empty;
@@ -28,5 +27,5 @@ public class EditProductDTO {
   public decimal Price { get; set; }
   public Guid BrandId { get; set; }
   public Guid CategoryId { get; set; }
-  public List<string> Pictures { get; set; }
+  public required List<string> Pictures { get; set; }
 }
